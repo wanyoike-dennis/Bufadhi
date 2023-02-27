@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/productsFragment">
+
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.dennis.bufadhi.ui.ProductsFragment"
+        android:label="@string/products"
+        tools:layout="@layout/fragment_products" >
+
+        <action
+            android:id="@+id/action_productsFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_productsFragment_to_salesFragment"
+            app:destination="@id/salesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.dennis.bufadhi.ui.DetailsFragment"
+        android:label="@string/product_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="productId"
+            app:argType="integer"
+            />
+        <action
+            android:id="@+id/action_detailsFragment_to_productsFragment"
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/productsFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_detailsFragment_to_salesFragment"
+            app:destination="@id/salesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/salesFragment"
+        android:name="com.dennis.bufadhi.ui.SalesFragment"
+        android:label="@string/sales_fragment_label"
+        tools:layout="@layout/fragment_sales" >
+        <action
+            android:id="@+id/action_salesFragment_to_productsFragment"
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/productsFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+</navigation>
