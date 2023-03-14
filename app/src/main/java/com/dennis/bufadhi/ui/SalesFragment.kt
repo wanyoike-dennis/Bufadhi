@@ -31,11 +31,14 @@ class SalesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val adapter = SalesAdapter{}
         binding?.summaryRecyclerView?.adapter = adapter
+
         salesViewModel.allSales.observe(this.viewLifecycleOwner){
             sales -> sales.let { adapter.submitList(it) }
         }
+      //  binding?.txtTotals?.text = salesViewModel.getSumPrice().toString()
     }
 
     override fun onDestroyView() {

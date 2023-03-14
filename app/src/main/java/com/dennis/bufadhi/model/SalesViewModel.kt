@@ -10,6 +10,13 @@ class SalesViewModel(private val salesDao:SalesDao) : ViewModel() {
  val allSales: LiveData<List<Sales>> = salesDao.getSales().asLiveData()
  val allItemsAvailable: LiveData<List<Stock>> = salesDao.getStock().asLiveData()
 
+    fun getSumPrice(){
+        viewModelScope.launch {
+            salesDao.getTotalPrice()
+        }
+    }
+
+
     private fun insertItem(sales: Sales){
         viewModelScope.launch {
             salesDao.insertAll(sales)

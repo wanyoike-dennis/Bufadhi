@@ -16,6 +16,9 @@ interface SalesDao {
     @Query("SELECT * FROM sales ORDER BY id DESC")
     fun getSales(): Flow<List<Sales>>
 
+    @Query("SELECT SUM(product_price) FROM sales")
+    fun getTotalPrice(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
    suspend fun insertAll(vararg sale:Sales)
 

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.dennis.bufadhi.BufadhiApplication
@@ -46,14 +47,26 @@ class ProductsFragment : Fragment() {
         val recycler = binding?.recyclerView
         recycler?.adapter = productAdapter
 
+
         salesViewModel.allItemsAvailable.observe(this.viewLifecycleOwner) { stocks ->
             stocks.let {
                 productAdapter.submitList(it as MutableList<Stock>)
+                if (productAdapter.itemCount==0){
+                    binding?.txtStatus?.text = "No data available"
+                }
+                else{
+                    binding?.txtStatus?.visibility = View.GONE
+                }
             }
         }
+
+
+
         binding?.apply {
             floatingActionButton.setOnClickListener { addProduct() }
-            fabHistory.setOnClickListener { findNavController().navigate(R.id.action_productsFragment_to_salesFragment)}
+            fabHistory.setOnClickListener {
+                findNavController().navigate(R.id.action_productsFragment_to_salesFragment)
+            }
         }
     }
 
@@ -72,11 +85,19 @@ class ProductsFragment : Fragment() {
         val productName = binding?.itemName?.text.toString()
         val productQuantity = binding?.itemQuantity?.text.toString().toIntOrNull() ?: 0
         if (isEntryValid()) {
-            salesViewModel.addNewStock(productName, productQuantity)
-            binding?.apply {
-                itemName.text?.clear()
-                itemQuantity.text?.clear()
+            if (productQuantity==0){
+                Toast.makeText(requireContext(),"you can't add 0 items",Toast.LENGTH_SHORT).show()
             }
+            else {
+                salesViewModel.addNewStock(productName, productQuantity)
+                binding?.apply {
+                    itemName.text?.clear()
+                    itemQuantity.text?.clear()
+                }
+            }
+        }
+        else{
+            Toast.makeText(requireContext(),"check your input fields",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -87,4 +108,5 @@ class ProductsFragment : Fragment() {
             name, quantity
         )
     }
+
 }

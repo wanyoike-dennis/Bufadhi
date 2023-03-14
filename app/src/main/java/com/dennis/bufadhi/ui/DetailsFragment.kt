@@ -73,7 +73,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun addNewSale() {
-        val tempPrice = binding?.price?.text.toString().toIntOrNull() ?: 0
+        val tempPrice = binding?.price?.text.toString().toInt()
         val name = binding?.txtName?.text.toString()
         val quantity = binding?.quantity?.text.toString().toIntOrNull()?:0
         val price = quantity * tempPrice
@@ -82,22 +82,38 @@ class DetailsFragment : Fragment() {
             Toast.makeText(requireContext(), "item sold successful !", Toast.LENGTH_LONG).show()
             findNavController().navigate(R.id.action_detailsFragment_to_salesFragment)
         }
+        else{
+            Toast.makeText(requireContext(),"check input fields",Toast.LENGTH_SHORT).show()
+        }
     }
     private fun bind(stock: Stock) {
         binding?.apply {
             txtName.text = stock.name
             txtNumberAvailable.text = stock.quantity.toString()
             btnSellProduct.isEnabled = salesViewModel.isStockAvailable(stock)
+            btnSell1.isEnabled = salesViewModel.isStockAvailable(stock)
             btnDelete.setOnClickListener { showConfirmationDialog() }
             btnSellProduct.setOnClickListener {
-                val no = quantity.text.toString().toInt()
-                salesViewModel.sellItem(stock,no)
-                addNewSale()
+                val no = quantity.text.toString().toIntOrNull() ?: 0
+                if (isEntryValid()) {
+                    if (no>stock.quantity){
+                        Toast.makeText(requireContext(),"quantity not available",Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        if (binding?.quantity?.text.toString()!="0" && binding?.price?.text.toString()!="0" ){
+                            salesViewModel.sellItem(stock, no)
+                            addNewSale()
+                        }
+                        else{
+                            Toast.makeText(requireContext(),"value cannot be 0",Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                else{
+                    Toast.makeText(requireContext(),"check your inputs",Toast.LENGTH_SHORT).show()
+                }
             }
-
-
-        }
-    }
+        } }
 
     private fun deleteItem(){
         salesViewModel.deleteItem(stock)
